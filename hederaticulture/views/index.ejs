@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+     Hederaticulture
+    </title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+ 
+
+
+<style>
+.imagelogov {
+list-style-type: none;
+margin: 0;
+ padding: 0;
+}
+
+.imagelogo_data{
+ width:120px;
+ height:60px;
+}
+  .navbar {
+    letter-spacing: 1px;
+    font-size: 14px;
+    border-radius: 0;
+    margin-bottom: 0;
+   background-color:#3b5998;
+
+    z-index: 9999;
+    border: 0;
+    font-family: comic sans ms;
+//color:white;
+  }
+
+
+.navbar-toggle {
+background-color:orange;
+  }
+
+.navgate {
+padding:16px;color:white;
+
+}
+
+.navgate:hover{
+ color: black;
+ background-color: #ddd;
+
+}
+
+
+.navbar-header{
+height:60px;
+}
+
+.navbar-header-collapse-color {
+background:white;
+}
+
+.dropdown_bgcolor{
+
+background: #3b5998;
+color:white;
+}
+
+.dropdown_dashedline{
+ border-bottom: 2px dotted white;
+}
+
+.navgate101:hover{
+background:purple;
+color:white;
+
+}
+
+
+
+
+.title_css{
+//background: green;
+color:#0088cc;
+cursor:pointer;
+font-size:24px;
+
+}
+
+
+.title_css:hover{
+//background: purple;
+color:purple;
+
+}
+
+
+
+.title_css1{
+//background: green;
+color:#800000;
+cursor:pointer;
+font-size:18px;
+
+}
+
+
+.title_css1:hover{
+//background: purple;
+color:purple;
+
+}
+
+
+
+
+.title_css2{
+//background: green;
+color:fuchsia;
+cursor:pointer;
+font-size:18px;
+
+}
+
+
+.title_css2:hover{
+//background: purple;
+color:purple;
+
+}
+
+
+.p_css{
+cursor:pointer;
+color:white;
+}
+
+
+.p_css:hover{
+//background: purple;
+color:purple;
+}
+</style>
+
+<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+<link rel="stylesheet" href="/javascripts/bootstrap.min.css" />
+  <script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/moment.js"></script>
+	<script src="/javascripts/livestamp.js"></script>
+
+
+
+
+<!-- start column nav-->
+
+<nav class="navbar navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navgator">
+        <span class="navbar-header-collapse-color icon-bar"></span>
+        <span class="navbar-header-collapse-color icon-bar"></span>
+        <span class="navbar-header-collapse-color icon-bar"></span> 
+        <span class="navbar-header-collapse-color icon-bar"></span>                       
+      </button>
+     
+<li class="navbar-brand home_click imagelogov" ><img class="img-rounded imagelogo_data" src="/images/logo.png"></li>
+    </div>
+    <div class="collapse navbar-collapse" id="navgator">
+
+
+      <ul class="nav navbar-nav navbar-right">
+
+          <li class="navgate" style='cursor:pointer' title='Request Help As A Farmer' data-toggle="modal" data-target="#myModal_send">Request Help As A Farmer</li>
+
+          <li class="navgate101"  title='View Payments/Donations'><a target="_blank" class='p_css' href='/users/payments'>View Payments/Donations</a></li>
+       
+      </ul>
+
+
+
+    </div>
+  </div>
+
+
+
+</nav>
+
+  </head>
+  <body>
+
+
+
+
+<script>
+
+$(document).ready(function(){
+$('#submit_btn').click(function () {
+
+var title  = $('#title').val();
+var desc = $('#desc').val();
+var amount = $('#amount').val();
+var video_id = $('#video_id').val();
+var fullname = $('#fullname').val();
+var email = $('#email').val();
+var location = $('#location').val();
+var crypto_accountId= $('#crypto_accountId').val();
+
+
+
+ if(crypto_accountId==""){
+alert('Your Hedera Account/Token ID Cannot be Empty');
+}
+
+ else if(fullname==""){
+alert('Fullname Cannot be Empty');
+}
+
+
+ else if(email==""){
+alert('Email Cannot be Empty');
+}
+
+
+
+ else if(location==""){
+alert('Your Location Cannot be Empty');
+}
+ else if(title==""){
+alert('Post Title Cannot be Empty');
+}
+
+
+ else if(desc==""){
+alert('Post Description Cannot be Empty');
+}
+
+ else if(amount==""){
+alert('Amount Requesting Cannot be Empty');
+}
+
+
+else if(isNaN(amount)){
+alert('Only Number is allowed for Amount Requesting');
+}
+
+ else if(video_id==""){
+alert('Youtube Video ID Cannot be Empty');
+}
+
+
+else{
+
+
+$("#loader").fadeIn(400).html('<br><div style=""><img src="/images/loader.gif">&nbsp;Please Wait, Processing Data...</div>');
+var datasend = {fullname:fullname, email:email, location:location, title:title, desc:desc, amount:amount, video_id:video_id,crypto_accountId:crypto_accountId};
+
+
+	
+		$.ajax({
+			
+			type:'POST',
+                        dataType: 'json',
+			url:'http://localhost:3000/users/send_data',
+			data:datasend,
+                        crossDomain: true,
+			cache:false,
+			success:function(msg){
+
+$("#loader").hide();
+$("#result").html(msg);
+setTimeout(function(){ $("#result").html(''); }, 5000);
+alert(msg.code);
+if(msg.code == 'success'){
+//location.reload();
+window.setTimeout(function() {
+    window.location.href = '/';
+}, 100);
+
+}
+
+
+//$('#cp').val('');		
+
+
+	
+}
+			
+		});
+		
+		}
+
+});
+
+});
+
+
+
+
+
+$(document).ready(function(){
+    $.ajax({
+        url: 'http://localhost:3000/users/load_post',
+        type: 'get',
+        dataType: 'JSON',
+        success: function(response){
+            var len = response.data.length;
+            for(var i=0; i<len; i++){
+                var id = response.data[i].id;
+                var fullname = response.data[i].fullname;
+                var email = response.data[i].email;
+                var location = response.data[i].location;
+ var title = response.data[i].title;
+var description = response.data[i].description;
+var amounting  = response.data[i].amounting;
+var video_id = response.data[i].video_id;
+var timing  = response.data[i].timing;
+var crypto_accountId = response.data[i].crypto_accountId;
+
+
+
+
+var rec = "<div  class='well'  id='' >" +  
+        
+"<div class='row'><div class='col-sm-6'>"+
+  "<p style='font-size:14px;color:black;'><b>Farmers Name: </b> " + fullname + "</p>" +
+"<p style='font-size:14px;color:black;'><b>Email: </b> " + email + "</p>" +
+"<p style='font-size:14px;color:black;'><b>Location: </b> " + location + "</p>" +
+"<p class='title_css2'><b>Hedera Account/Token ID: </b> " + crypto_accountId + "</p>" +
+
+//"<div style='display:none;' align='center'>"+id+"<input type=text name='report_id' id='id' value='"+title+"'></div>" +
+  
+"<div  class='title_css'><b>Post Title: </b>"+title+"</div>" +
+ "<div class='title_cssx'><b>Description:</b> " + description + "</div>" +
+
+"<div  class='title_css1'><b>Amount Seeking For: </b>"+amounting+"(Hbars)</div>" +
+
+
+  "<span><b> <span style='color:#3b5998' class='fa fa-calendar'></span>Time:</b> </span>" +
+"<b><span data-livestamp='" + timing + "'></span></b><br>"+
+
+
+
+
+
+  
+"<br><div style='color:purple;cursor:pointer;color:white;background:#800000;padding:6px;width: 200px;' data-toggle='modal' data-target='#myModal_donate'  title='Donate Via Hedera' data-reciever_account=\""+ crypto_accountId +"\" data-fullname=\""+ fullname +"\"  data-id=\""+ id +"\" data-email=\""+ email +"\"  data-amounting=\""+ amounting +"\" data-title=\""+ title +"\"  class='btn_action'>Donate Via Hedera </div>"+   
+"</div>"+
+
+"<div class='col-sm-6'>"+
+"<iframe width='420' height='345' src='https://www.youtube.com/embed/"+video_id+"'></iframe>"+
+"</div></div>"+
+ 
+"</div>";
+
+ $("#res_report").append(rec);
+
+$("#loader_posts").hide();
+
+
+
+
+            }
+
+        }
+    });
+});
+
+
+
+
+
+//updates
+
+$(document).ready(function(){
+//$('.btn_action').click(function(){
+$(document).on( 'click', '.btn_action', function(){ 
+
+var id = $(this).data('id');
+var fullname = $(this).data('fullname');
+var email = $(this).data('email');
+var amounting = $(this).data('amounting');
+var title = $(this).data('title');
+var reciever_account = $(this).data('reciever_account');
+
+$('#p_email').html(email);
+$('#p_fullname').html(fullname);
+$('#p_amounting').html(amounting);
+$('#p_title').html(title);
+$('#p_reciever_account').html(reciever_account);
+
+
+$('#reciever_name').val(fullname).value;
+$('#reciever_email').val(email).value;
+$('#reciever_id').val(id).value;
+$('#reciever_account').val(reciever_account).value;
+
+
+
+//alert(reciever_account);
+		
+	})
+
+
+});
+//updates
+
+
+
+
+
+
+
+
+// send donation starts
+
+$(document).ready(function(){
+$('#donate_btn').click(function () {
+
+var reciever_id  = $('.reciever_id').val();
+var reciever_name = $('.reciever_name').val();
+var reciever_account = $('.reciever_account').val();
+var donor_name = $('#donor_name').val();
+var donor_account_id = $('#donor_account_id').val();
+var donor_private_key = $('#donor_private_key').val();
+var donor_amount = $('#donor_amount').val();
+
+
+
+ if(reciever_id==""){
+alert('Recipent Id not Found. Refresh Page');
+}
+
+ else if(reciever_name==""){
+alert('Reciever Fullname Cannot be Empty');
+}
+
+
+ else if(donor_name==""){
+alert('Donor Name Cannot be Empty');
+}
+
+
+
+ else if(donor_account_id==""){
+alert('Donor Account ID Cannot be Empty');
+}
+ else if(donor_private_key==""){
+alert('Donor DER Private Key Cannot be Empty');
+}
+
+ else if(donor_amount==""){
+alert('Amount to be Donated Cannot be Empty');
+}
+
+
+else if(isNaN(donor_amount)){
+alert('Only Number is allowed for Amount to be Donated');
+}
+
+
+else{
+
+
+$("#loader_donate").fadeIn(400).html('<br><div style=""><img src="/images/loader.gif">&nbsp;Please Wait, Hedera Payments Donation is bein Processed...</div>');
+var datasend = {reciever_account:reciever_account, reciever_id:reciever_id, reciever_name:reciever_name, donor_name:donor_name, donor_account_id:donor_account_id, donor_amount:donor_amount, donor_private_key:donor_private_key};
+
+
+	
+		$.ajax({
+			
+			type:'POST',
+                        dataType: 'json',
+			url:'http://localhost:3000/users/send_donation',
+			data:datasend,
+                        crossDomain: true,
+			cache:false,
+			success:function(msg){
+
+$("#loader_donate").hide();
+$("#result_donate").html(msg);
+//setTimeout(function(){ $("#result_donate").html(''); }, 5000);
+//alert(msg.code);
+if(msg.code == 'success'){
+alert('Donation Payments Successful');
+$('#donor_private_key').val('');
+location.reload();
+}
+
+
+$('#donor_private_key').val('');		
+
+
+	
+}
+			
+		});
+		
+		}
+
+});
+
+});
+
+// send donation ends
+
+
+</script>
+
+
+
+<br><br><br><br>
+
+<h3>Hederaticulture</h3>
+This is an application that empowers Farmers to fight Climatic Crisis via <b>Hedera Crypto</b> Fund Donation Empowerments.<br><br>
+
+<div class="" id="res_report"></div>
+
+
+
+
+
+
+
+
+
+<!-- Action Modal starts here-->
+
+<div class="container_action">
+
+  <div class="modal fade " id="myModal_donate" role="dialog">
+    <div class="modal-dialog modal-lg modal-appear-center1 modal_mobile_resize modaling_sizing">
+      <div class="modal-content">
+        <div class="modal-header" style="color:black; background:#ddd">
+ <button type="button" class="pull-right btn btn-default" data-dismiss="modal">Close</button>
+
+          <h4 class="modal-title">Make Donation</h4>
+        </div>
+        <div class="modal-body">
+     
+
+
+<!-- form starts  -->
+
+
+<h4>Reciever Name:  <span id="p_fullname"></span></h4>
+<b>Reciever Email: </b> <span id="p_email"></span><br />
+<b>Reciever Hedera AccountId: </b> <span id="p_reciever_account"></span><br />
+<b>Requesting Amount: </b> <span id="p_amounting"></span>(Hbar)<br />
+
+
+
+
+
+
+
+<!-- status start-->
+
+<div style='background:#f1f1f1; padding:16px;color:black'>
+
+
+<center><h4> Donate to Farmer via Hedera</h4></center>
+
+
+
+<input type='hidden'  id='reciever_id' class='reciever_id' value=''>
+<input type='hidden'  id='reciever_name' class='reciever_name' value=''>
+<input type='hidden'  id='reciever_email' class='reciever_email' value=''>
+<input type='hidden'  id='reciever_account' class='reciever_account' value=''>
+
+
+
+<div class='col-sm-12'>
+<div class='form-group col-sm-12'><label>Donor Name: </label>
+<input type='text' class='col-sm-12 form-control' id='donor_name' name='donor_name'  placeholder='Donor Name'>
+</div>
+
+
+<div class='form-group col-sm-12'><label>Hedera Account Id/Token: </label>
+<input type='text' class='col-sm-12 form-control' id='donor_account_id' name='donor_account_id'  placeholder='Hedera Account Id/Token'>
+</div>
+
+<div class='form-group col-sm-12'><label>Hedera DER Private Key: </label>
+<input type='password' class='col-sm-12 form-control' id='donor_private_key' name='donor_private_key'  placeholder='Hedera DER Private Key:'>
+</div>
+
+
+<div class='form-group col-sm-12'><label>Amount Donating(Hbar): </label>
+<input type='text' class='col-sm-12 form-control' id='donor_amount' name='donor_amount'  placeholder='Amount Donating(Hbar)'>
+</div>
+
+
+
+<div class='form-group col-sm-12'>
+  <div id='loader_donate'></div>
+<div id='result_donate'></div>
+<button class='pull-right col-sm-6 btn btn-success donate_btn' id="donate_btn" >Donate Now</button>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- form ends  -->
+
+
+
+
+
+<br /><br />
+<br /><br />
+<br /><br />
+</div>
+
+
+
+        </div>
+        <div class="modal-footer modal_footer_color" style="color:black; background:#ddd">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<!-- Action Modal ends here  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Modal start -->
+
+
+
+<div id="myModal_send" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header"  style='background: #3b5998;color:white;padding:10px;'>
+        <h4 class="modal-title">Share Farming Climatic Crisis</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+Share Your Share Farming Climatic Crisis and get help with <b>Hedera Cryprto Currency.</b>
+ 
+<br><br>
+
+
+
+
+
+
+
+ <div class="form-group  col-sm-12">
+              <label>Hedera Account/Token ID: Eg. (0.0.412700000) </label><br>
+<a target="_blank" href="https://portal.hedera.com/register">Goto Hedera Portal</a> to get your Account/Token Id<br>
+              <input type="text" class="result-token2 col-sm-12 form-control" id="crypto_accountId" name="crypto_accountId" placeholder="Hedera Account/Token ID">
+            </div>
+
+
+<div class="form-group col-sm-12">
+              <label>Fullname: </label>
+              <input type="text" class="col-sm-12 form-control" id="fullname" name="fullname"  placeholder="Enter FullName">
+            </div>
+
+<div class="form-group col-sm-12">
+              <label>Email: </label>
+              <input type="text" class="col-sm-12 form-control" id="email" name="email"  placeholder="Enter Email">
+            </div>
+
+
+<div class="form-group col-sm-12">
+              <label>Location/Address: </label>
+              <input type="text" class="col-sm-12 form-control" id="location" name="location"  placeholder="Enter Location/Address">
+            </div>
+
+
+
+
+ <div class="form-group col-sm-12">
+              <label>Post Title: </label>
+              <input type="text" class="col-sm-12 form-control" id="title" name="title"  placeholder="Post Title">
+            </div>
+
+ <div class="form-group col-sm-12">
+              <label>Post Description</label>
+              <textarea class="col-sm-12 form-control" id="desc" name="desc"   placeholder="Post Description"></textarea>
+            </div>
+
+ <div class="form-group col-sm-12">
+              <label>Amount Seeking(HBar) to help fight Climatic Change</label>
+              <input type="text" class="col-sm-12 form-control" id="amount" name="amount"  placeholder="Amount Seeking(HBar) to help fight Climatic Change">
+            </div>
+
+
+
+ <div class="form-group col-sm-12">
+              <label>Youtube Video showing Area/things Affected by Climatic Change</label>
+<br>
+<span style='color:red'> Enter Only Youtube Video ID </span>Eg: https://www.youtube.com/watch?v=nEIpX3bPSlE
+<br>
+Video Id is <span style='color:red;font-size:20px'>nEIpX3bPSlE</span>
+              <input type="text" class="col-sm-12 form-control" id="video_id" name="video_id"  placeholder="Enter Youtube Video Id">
+            </div>
+<br>
+
+
+ <div class="form-group col-sm-12">
+<div id="loader"></div>
+<div id="result"></div>
+          <button type="button" id="submit_btn" class="btn btn-primary">Submit </button>
+        </div>
+
+
+
+
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--Modal ends -->
+
+
+
+  </body>
+</html>

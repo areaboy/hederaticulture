@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+     Hederaticulture
+    </title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+ 
+
+
+<style>
+.imagelogov {
+list-style-type: none;
+margin: 0;
+ padding: 0;
+}
+
+.imagelogo_data{
+ width:120px;
+ height:60px;
+}
+  .navbar {
+    letter-spacing: 1px;
+    font-size: 14px;
+    border-radius: 0;
+    margin-bottom: 0;
+   background-color:#3b5998;
+
+    z-index: 9999;
+    border: 0;
+    font-family: comic sans ms;
+//color:white;
+  }
+
+
+.navbar-toggle {
+background-color:orange;
+  }
+
+.navgate {
+padding:16px;color:white;
+
+}
+
+.navgate:hover{
+ color: black;
+ background-color: #ddd;
+
+}
+
+
+.navbar-header{
+height:60px;
+}
+
+.navbar-header-collapse-color {
+background:white;
+}
+
+.dropdown_bgcolor{
+
+background: #3b5998;
+color:white;
+}
+
+.dropdown_dashedline{
+ border-bottom: 2px dotted white;
+}
+
+.navgate101:hover{
+background:purple;
+color:white;
+
+}
+
+
+
+
+.title_css{
+//background: green;
+color:#0088cc;
+cursor:pointer;
+font-size:24px;
+
+}
+
+
+.title_css:hover{
+//background: purple;
+color:purple;
+
+}
+
+
+
+.title_css1{
+//background: green;
+color:#800000;
+cursor:pointer;
+font-size:18px;
+
+}
+
+
+.title_css1:hover{
+//background: purple;
+color:purple;
+
+}
+
+
+
+
+.title_css2{
+//background: green;
+color:fuchsia;
+cursor:pointer;
+font-size:18px;
+
+}
+
+
+.title_css2:hover{
+//background: purple;
+color:purple;
+
+}
+
+
+.p_css{
+cursor:pointer;
+color:white;
+}
+
+
+.p_css:hover{
+//background: purple;
+color:purple;
+}
+</style>
+
+<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+<link rel="stylesheet" href="/javascripts/bootstrap.min.css" />
+  <script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/moment.js"></script>
+	<script src="/javascripts/livestamp.js"></script>
+
+
+
+
+<!-- start column nav-->
+
+<nav class="navbar navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navgator">
+        <span class="navbar-header-collapse-color icon-bar"></span>
+        <span class="navbar-header-collapse-color icon-bar"></span>
+        <span class="navbar-header-collapse-color icon-bar"></span> 
+        <span class="navbar-header-collapse-color icon-bar"></span>                       
+      </button>
+     
+<li class="navbar-brand home_click imagelogov" ><img class="img-rounded imagelogo_data" src="/images/logo.png"></li>
+    </div>
+    <div class="collapse navbar-collapse" id="navgator">
+
+
+      <ul class="nav navbar-nav navbar-right">
+
+
+          <li class="navgate101"  title='Back to Home'><a class='p_css' href='/'>Back to Home</a></li>
+       
+      </ul>
+
+
+
+    </div>
+  </div>
+
+
+
+</nav>
+
+  </head>
+  <body>
+
+<script>
+
+
+
+$(document).ready(function(){
+$("#loader_p").fadeIn(400).html('<br><div style=""><img src="/images/loader.gif">&nbsp;Please Wait, Loading Hedera Payments Donation...</div>');
+
+    $.ajax({
+        url: 'http://localhost:3000/users/load_payments',
+        type: 'get',
+        dataType: 'JSON',
+        success: function(response){
+            var len = response.data.length;
+            for(var i=0; i<len; i++){
+                var id = response.data[i].id;
+                var reciever_name = response.data[i].reciever_name;
+                var donor_name = response.data[i].donor_name;
+  var donor_account_id = response.data[i].donor_account_id;
+  var reciever_account = response.data[i].reciever_account;
+  var donor_amount = response.data[i].donor_amount;
+                var timing = response.data[i].timing;
+
+                var tr_str = "<tr>" +
+                    "<td align='center'>" + (i+1) + "</td>" +
+                    "<td align='center'>" + reciever_name + "</td>" +
+                    "<td align='center'>" + donor_name + "</td>" +
+"<td align='center'>" + donor_account_id + "</td>" +
+"<td align='center'>" + reciever_account + "</td>" +
+"<td align='center' style='color:#800000'><b>" + donor_amount + "(Hbars)</b></td>" +
+                    "<td align='center'><span data-livestamp='" + timing + "'></span></td>" +
+                    "</tr>";
+
+                $("#h_pay tbody").append(tr_str);
+$("#loader_p").hide();
+            }
+
+        }
+    });
+
+});
+
+
+
+</script>
+
+
+
+
+
+
+<br><br><br>
+<h3>View Farmers Hedera Crypto Payments Donations</h3>
+
+<div id="loader_p"></div>
+<div class="container table-responsive">
+
+
+            <table id="h_pay" class="table table-striped table-hover" border="1" >
+                <thead>
+                    <tr>
+                        <th width="5%">S.no</th>
+                        <th width="20%">Farmers</th>
+                        <th width="20%">Donors</th>
+<th width="10%">Donor Hedera AccountId</th>
+<th width="10%">Farmer Hedera AccountId</th>
+<th width="20%">Amount(Hbars)</th>
+                        <th width="15%">Time</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+
+
+
+
+
+  </body>
+</html>
